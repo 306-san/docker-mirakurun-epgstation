@@ -1,10 +1,11 @@
+# ※ l3tnun/docker-mirakurun-epgstation をベースに PX-W3PE4で動くように自前で改変してあります
 # docker-mirakurun-epgstation
 [Mirakurun](https://github.com/Chinachu/Mirakurun) + [EPGStation](https://github.com/l3tnun/EPGStation) の Docker コンテナ
 
 ## 前提条件
 - Docker, docker-compose の導入が必須
 - ホスト上の pcscd は停止する
-- PT3用に設定済みなのでPT3での使用を想定
+- ~PT3用に設定済みなのでPT3での使用を想定~
 
 ## インストール手順
 
