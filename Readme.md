@@ -1,4 +1,4 @@
-# ※ l3tnun/docker-mirakurun-epgstation をベースに PX-W3PE4で動くように自前で改変してあります
+# ※ l3tnun/docker-mirakurun-epgstation をベースに PX-W3PE4で動くように / QSV エンコードできるように 自前で改変してあります
 # docker-mirakurun-epgstation
 [Mirakurun](https://github.com/Chinachu/Mirakurun) + [EPGStation](https://github.com/l3tnun/EPGStation) の Docker コンテナ
 
