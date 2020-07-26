@@ -1,0 +1,80 @@
+version: '3.7'
+services:
+    mirakurun:
+        build:
+            context: mirakurun
+        # image: chinachu/mirakurun:3.2.0
+        cap_add:
+            - SYS_ADMIN
+            - SYS_NICE
+        ports:
+            - 40772:40772
+            - 9229:9229
+        volumes:
+            - ./mirakurun/conf:/app-config
+            - ./mirakurun/data:/app-data
+        environment:
+            TZ: "Asia/Tokyo"
+            # LOG_LEVEL: "3"
+            # DEBUG: "true"
+        devices:
+            - /dev/bus:/dev/bus
+            - /dev/px4video0:/dev/px4video0
+            - /dev/px4video1:/dev/px4video1
+            - /dev/px4video2:/dev/px4video2
+            - /dev/px4video3:/dev/px4video3
+            # - /dev/dvb:/dev/dvb
+        restart: always
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+
+    mysql:
+        image: mariadb:10.4
+        volumes:
+            - mysql-db:/var/lib/mysql
+        environment:
+            MYSQL_USER: epgstation
+            MYSQL_PASSWORD: epgstation
+            MYSQL_ROOT_PASSWORD: epgstation
+            MYSQL_DATABASE: epgstation
+            TZ: "Asia/Tokyo"
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --performance-schema=false --expire_logs_days=1
+        restart: always
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+
+    epgstation:
+        build:
+            context: epgstation
+            args:
+                - CPUCORE=2
+        cap_add:
+            - ALL
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - ./epgstation/config:/app/config
+            - ./epgstation/data:/app/data
+            - ./epgstation/thumbnail:/app/thumbnail
+            - ./epgstation/logs:/app/logs
+            - ./recorded:/app/recorded
+        devices:
+            - /dev/dri:/dev/dri
+        environment:
+            TZ: "Asia/Tokyo"
+        depends_on:
+            - mirakurun
+            - mysql
+        ports:
+            - "8888:8888"
+            - "8889:8889"
+        # user: "0:0"
+        restart: always
+volumes:
+    mysql-db:
+        driver: local
+
